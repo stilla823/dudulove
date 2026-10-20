@@ -1,0 +1,248 @@
+import streamlit as st
+import streamlit.components.v1 as components
+
+st.set_page_config(page_title="A surprise for you", page_icon="💕", layout="centered")
+
+st.markdown(
+    """
+    <style>
+      #MainMenu, header, footer {visibility: hidden;}
+      .block-container {padding: 0 !important; max-width: 100% !important;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# The whole website is embedded here, so app.py works on its own (no other files needed).
+PAGE = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💕 A surprise for you</title>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink: #ff6b9d;
+  --pink-dark: #e0457f;
+  --bg1: #ffe4ee;
+  --bg2: #fff5f8;
+  --text: #5a2a3d;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--bg1), var(--bg2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border-radius: 28px;
+  padding: 36px 26px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(255, 107, 157, 0.25);
+}
+
+.page { display: none; }
+.page.active { display: block; animation: pop 0.5s ease; }
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.emoji { font-size: 1.6rem; margin-bottom: 12px; }
+.emoji.big { font-size: 3.4rem; animation: float 2.5s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+h1 { font-size: 1.5rem; line-height: 1.35; margin-bottom: 10px; }
+h2 { font-size: 1.4rem; margin-bottom: 18px; color: var(--pink-dark); }
+.sub { font-weight: 600; color: var(--pink-dark); margin-bottom: 8px; }
+p { line-height: 1.7; margin-bottom: 10px; }
+
+.row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+
+.btn {
+  margin-top: 18px;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+  padding: 13px 28px;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(224, 69, 127, 0.35);
+  transition: transform 0.15s ease;
+}
+.row .btn { margin-top: 0; }
+.btn:hover { transform: translateY(-2px) scale(1.03); }
+.btn:active { transform: scale(0.97); }
+.btn.ghost {
+  background: #fff;
+  color: var(--pink-dark);
+  border: 2px solid var(--pink);
+  box-shadow: none;
+}
+
+/* Letter */
+.letter {
+  background: #fffaf0;
+  border: 1px solid #f3dfc4;
+  border-radius: 14px;
+  padding: 28px 22px;
+  box-shadow: inset 0 0 30px rgba(243, 223, 196, 0.5);
+}
+.letter { text-align: left; }
+.letter h2 { text-align: center; }
+.letter .emoji { text-align: center; }
+.letter p { margin-bottom: 16px; }
+.highlight {
+  text-align: center;
+  background: #ffe4ee;
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--pink-dark);
+  font-weight: 600;
+}
+.highlight strong { font-size: 1.3rem; }
+.sign { margin-top: 16px; font-weight: 600; color: var(--pink-dark); text-align: right; }
+.sign small { font-weight: 400; color: var(--text); }
+
+/* Floating hearts */
+.hearts { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.heart {
+  position: absolute;
+  bottom: -40px;
+  animation: rise linear forwards;
+  opacity: 0.7;
+}
+@keyframes rise {
+  to { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+}
+
+</style>
+</head>
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+
+    <!-- PAGE 1 -->
+    <section class="page active" id="page1">
+      <div class="emoji big">🌸</div>
+      <h1>Psst... this is for you 👀</h1>
+      <p class="sub">I have a surprise</p>
+      <p>But first, I have a little question for you... 🤭</p>
+      <button class="btn" data-next="page2">I'm ready! ✨</button>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section class="page" id="page2">
+      <div class="emoji big">💌</div>
+      <h1>Are you ready to open the letter?</h1>
+      <p class="sub">Everything will make sense very soon!</p>
+      <div class="row">
+        <button class="btn" data-next="page3">Yes, open it! 💕</button>
+        <button class="btn ghost" id="noBtn">Not yet...</button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: THE LETTER -->
+    <section class="page" id="page3">
+      <article class="letter">
+        <div class="emoji">💌</div>
+        <h2>To my Valentin</h2>
+
+        <!-- EDIT THE LETTER TEXT BELOW -->
+        <p>Hello baby! I made a little surprise for you!</p>
+
+        <p>I wanted to show you that I am making big progress with my engineering skills. I didn't pay enough attention to my little baby cat for a week &mdash; both the test and the exhibition made me exhausted. But you really gave me the strength to make it through. I am very proud of myself for succeeding, and I thank you so much.</p>
+
+        <p>I hope everything will work well for you!</p>
+
+        <p>We both know it won't be easy, but if we fight together, we can do anything. Don't put too much pressure on yourself &mdash; let it go a little bit. Then you will see the path to the breakthrough.</p>
+
+        <p>Always love you, my baby, my love, my heart.</p>
+
+        <p class="highlight">I am coming soon.<br /><strong>December 19th.</strong> 🛬</p>
+
+        <p>Love you.</p>
+
+        <p class="sign">From your baby ❤️</p>
+        <!-- END LETTER -->
+      </article>
+    </section>
+
+  </main>
+
+  <script>
+// Page navigation
+function goTo(id) {
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if (id === "page3") burst();
+}
+
+document.querySelectorAll("[data-next]").forEach((btn) => {
+  btn.addEventListener("click", () => goTo(btn.dataset.next));
+});
+
+// Playful "Not yet..." button: it dodges, then gives in after a few tries
+const noBtn = document.getElementById("noBtn");
+const noTexts = ["Not yet...", "Are you sure? 🥺", "Pleeease 💕", "Okay, open it!"];
+let noCount = 0;
+noBtn.addEventListener("click", () => {
+  noCount++;
+  if (noCount >= noTexts.length - 1) {
+    noBtn.textContent = noTexts[noTexts.length - 1];
+    noBtn.addEventListener("click", () => goTo("page3"), { once: true });
+  } else {
+    noBtn.textContent = noTexts[noCount];
+  }
+});
+
+// Floating hearts
+const heartsEl = document.getElementById("hearts");
+const symbols = ["💗", "💕", "🌸", "💖"];
+
+function spawnHeart() {
+  const h = document.createElement("span");
+  h.className = "heart";
+  h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = 14 + Math.random() * 22 + "px";
+  h.style.animationDuration = 6 + Math.random() * 5 + "s";
+  heartsEl.appendChild(h);
+  setTimeout(() => h.remove(), 11000);
+}
+
+setInterval(spawnHeart, 700);
+
+function burst() {
+  for (let i = 0; i < 25; i++) setTimeout(spawnHeart, i * 60);
+}
+
+</script>
+</body>
+</html>
+"""
+
+components.html(PAGE, height=720, scrolling=True)
