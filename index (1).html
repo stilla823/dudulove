@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💕 A surprise for you</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <main class="card">
+
+    <!-- PAGE 1 -->
+    <section class="page active" id="page1">
+      <div class="emoji big">🌸</div>
+      <h1>Psst... this is for you 👀</h1>
+      <p class="sub">I have a surprise</p>
+      <p>But first, I have a little question for you... 🤭</p>
+      <button class="btn" data-next="page2">I'm ready! ✨</button>
+    </section>
+
+    <!-- PAGE 2 -->
+    <section class="page" id="page2">
+      <div class="emoji big">💌</div>
+      <h1>Are you ready to open the letter?</h1>
+      <p class="sub">Everything will make sense very soon!</p>
+      <div class="row">
+        <button class="btn" data-next="page3">Yes, open it! 💕</button>
+        <button class="btn ghost" id="noBtn">Not yet...</button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: THE LETTER -->
+    <section class="page" id="page3">
+      <article class="letter">
+        <div class="emoji">💌</div>
+        <h2>To my Valentin</h2>
+
+        <!-- EDIT THE LETTER TEXT BELOW -->
+        <p>Hello baby! I made a little surprise for you!</p>
+
+        <p>I wanted to show you that I am making big progress with my engineering skills. I didn't pay enough attention to my little baby cat for a week &mdash; both the test and the exhibition made me exhausted. But you really gave me the strength to make it through. I am very proud of myself for succeeding, and I thank you so much.</p>
+
+        <p>I hope everything will work well for you!</p>
+
+        <p>We both know it won't be easy, but if we fight together, we can do anything. Don't put too much pressure on yourself &mdash; let it go a little bit. Then you will see the path to the breakthrough.</p>
+
+        <p>Always love you, my baby, my love, my heart.</p>
+
+        <p class="highlight">I am coming soon.<br /><strong>December 19th.</strong> 🛬</p>
+
+        <p>Love you.</p>
+
+        <p class="sign">From your baby ❤️</p>
+        <!-- END LETTER -->
+      </article>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
